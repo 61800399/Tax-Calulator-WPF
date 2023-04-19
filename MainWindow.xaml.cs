@@ -27,39 +27,52 @@ namespace Tax_Calulator_WPF
         }
 
         
-
+        private void SetIncomeText(string NewText)
+        {
+            
+            // Add $ to start of text
+            string InputText = IncomeInput.Text + NewText;
+            InputText = InputText.Replace("$", "");
+            double.TryParse(InputText, out double Income);
+            IncomeInput.Text = $"${Income}";
+            IncomeInput.CaretIndex = IncomeInput.GetLineLength(0);
+            // Calulations
+            NetIncomeLab.Content = $"Net Income: ${TaxReturn.NetIncome(Income)}";
+            TaxRateLab.Content = $"Tax Rate: {TaxReturn.GetRate(Income)}%";
+            LostMoneyLab.Content = $"Money Lost: ${TaxReturn.TaxedAmount(Income)}";
+        }
         private void IncomeInput_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            double Income = 0;
-            TextBox Box = sender as TextBox;
-            if (e != null)
+            e.Handled = !double.TryParse($"{IncomeInput.Text.Replace("$", "")}{e.Text}", out _);
+            if (!e.Handled)
             {
-                string Input = Box.Text + e.Text;
-                Input.Replace("$", "");
-                e.Handled = !double.TryParse(Input, out Income);
-            }
-            
-            if (e == null || !e.Handled)
-            {
-                IncomeInput.Text = $"${Income}";
-                NetIncomeLab.Content = $"Net Income: ${Math.Round(TaxReturn.NetIncome(Income), 2)}";
-                LostMoneyLab.Content = $"Money Lost: ${TaxReturn.TaxedAmount(Income)}";
+                e.Handled = true;
+                SetIncomeText(e.Text);
             }
         }
 
         private void WageBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = !double.TryParse(e.Text, out _);
+            string NewText = WageBox.Text + e.Text;
+            e.Handled = !double.TryParse(NewText.Replace("$", ""), out _);
+            if (!e.Handled)
+            {
+                e.Handled = true;
+                WageBox.Text = $"${NewText.Replace("$", "")}";
+                WageBox.CaretIndex = WageBox.GetLineLength(0);
+            }
         }
 
         private void PartBut_Click(object sender, RoutedEventArgs e)
         {
-            WageToSalaryLab.Text = $"${Math.Round(Salary.PartTimeGross(12, Math.Round(Hour_Slider.Value)), 2)}";
+            double.TryParse(WageBox.Text.Replace("$", ""), out double income);
+            WageToSalaryLab.Text = $"${Math.Round(Salary.PartTimeGross(income, Math.Round(Hour_Slider.Value)), 2)}";
         }
 
         private void FullBut_Click(object sender, RoutedEventArgs e)
         {
-            WageToSalaryLab.Text = $"${Math.Round(Salary.FullTimeGross(12, Math.Round(Hour_Slider.Value)), 2)}";
+            double.TryParse(WageBox.Text.Replace("$", ""), out double income);
+            WageToSalaryLab.Text = $"${Math.Round(Salary.FullTimeGross(income, Math.Round(Hour_Slider.Value)), 2)}";
         }
 
         private void Hour_Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -71,8 +84,13 @@ namespace Tax_Calulator_WPF
         {
             if (e.Key == Key.Return)
             {
-                IncomeInput_PreviewTextInput(sender, null);
+                SetIncomeText("");
             }
+            else if (e.Key == Key.Back)
+            {
+                SetIncomeText(null);
+            }
+
         }
     }
 }
