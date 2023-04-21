@@ -1,26 +1,26 @@
-﻿<Window x:Class="Tax_Calulator_WPF.MainWindow"
+﻿<Window x:Name="WINDOW"
+        x:Class="Tax_Calulator_WPF.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tax_Calulator_WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1000">
+        Title="Tax Calculator" Height="600" Width="1000">
     <Grid>
         <StackPanel Margin="10,10,490,248" Width="375">
             <Label Content="Income Yearly:" d:LayoutOverrides="Width, Height" FontSize="24"/>
-            <TextBox x:Name="IncomeInput"  TextWrapping="Wrap" Text="" Height="83" FontSize="36" Width="375" RenderTransformOrigin="0.502,0.555" PreviewTextInput="IncomeInput_PreviewTextInput" PreviewKeyDown="IncomeInput_PreviewKeyDown"/>
+            <TextBox x:Name="IncomeInput"  TextWrapping="Wrap" Text="$0" Height="83" FontSize="36" Width="375" RenderTransformOrigin="0.502,0.555" PreviewTextInput="IncomeInput_PreviewTextInput" PreviewKeyDown="IncomeInput_PreviewKeyDown"/>
 
         </StackPanel>
         <StackPanel Margin="400,10,25,20" Width="375">
             <Label Content="Find your salary! Enter hourly wage:" Height="45" FontSize="22"/>
-            <TextBox x:Name="WageBox" TextWrapping="Wrap" Text="" Width="375" Height="45" PreviewTextInput="WageBox_PreviewTextInput" FontSize="36" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            <TextBox x:Name="WageBox" TextWrapping="Wrap" Text="$0" Width="375" Height="45" PreviewTextInput="WageBox_PreviewTextInput" FontSize="36" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" PreviewKeyDown="WageBox_PreviewKeyDown"/>
             <Label x:Name="SliderLab" Content="Hours per week:" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
             <Slider x:Name="Hour_Slider" Width="375" Foreground="Red" Value="40" Maximum="80" Ticks="10 24 30 40 48 50 60 70 80" ToolTip="Hours Worked" TickPlacement="BottomRight" ValueChanged="Hour_Slider_ValueChanged"/>
             <Button x:Name="PartBut" Content="Part Time" Height="50" Click="PartBut_Click"/>
             <Button x:Name="FullBut" Content="Full Time" Height="50" Click="FullBut_Click"/>
-            <Button x:Name="MoreBut" Content="More Options" Height="50"/>
-            <TextBox x:Name="WageToSalaryLab" IsReadOnly="True" Text="$" Height="72" FontSize="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{x:Null}"/>
+            <TextBox x:Name="WageToSalaryLab" IsReadOnly="True" Text="$0" Height="72" FontSize="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="{x:Null}"/>
         </StackPanel>
         <StackPanel Margin="10,157,405,10">
             <Label x:Name="NetIncomeLab" Content="Net Income: " Height="50" FontSize="24"/>
@@ -28,6 +28,5 @@
             <Label x:Name="TaxRateLab" Content="Tax Rate: " Height="50" FontSize="24"/>
             <Label x:Name="ExemptionsLab" Content="Exepmtions: " Height="50" FontSize="24"/>
         </StackPanel>
-
     </Grid>
 </Window>

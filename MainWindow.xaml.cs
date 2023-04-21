@@ -24,14 +24,23 @@ namespace Tax_Calulator_WPF
         public MainWindow()
         {
             InitializeComponent();
+            WINDOW.ResizeMode = ResizeMode.NoResize;
         }
 
         
         private void SetIncomeText(string NewText)
         {
-            
+            string InputText;
+            if (NewText == null)
+            {
+               InputText = IncomeInput.Text.Substring(0, IncomeInput.Text.Length-1);
+            }
+            else
+            {
+                InputText = IncomeInput.Text + NewText;
+            }
             // Add $ to start of text
-            string InputText = IncomeInput.Text + NewText;
+            
             InputText = InputText.Replace("$", "");
             double.TryParse(InputText, out double Income);
             IncomeInput.Text = $"${Income}";
@@ -58,11 +67,29 @@ namespace Tax_Calulator_WPF
             if (!e.Handled)
             {
                 e.Handled = true;
-                WageBox.Text = $"${NewText.Replace("$", "")}";
-                WageBox.CaretIndex = WageBox.GetLineLength(0);
+                SetWageInput(NewText);
             }
         }
-
+        private void WageBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Back)
+            {
+                e.Handled = true;
+                string NewText = WageBox.Text.Substring(0, WageBox.Text.Length - 1);
+                if (NewText == "$")
+                {
+                    NewText = "0";
+                }
+                SetWageInput(NewText);
+            }
+        }
+        private void SetWageInput(string NewText)
+        {
+            NewText = NewText.Replace("$", "");
+            double Wage = double.Parse(NewText);
+            WageBox.Text = $"${Wage}";
+            WageBox.CaretIndex = WageBox.GetLineLength(0);
+        }
         private void PartBut_Click(object sender, RoutedEventArgs e)
         {
             double.TryParse(WageBox.Text.Replace("$", ""), out double income);
@@ -88,9 +115,48 @@ namespace Tax_Calulator_WPF
             }
             else if (e.Key == Key.Back)
             {
+                e.Handled = true;
                 SetIncomeText(null);
             }
-
         }
+
+        /*private void MoreBut_Click(object sender, RoutedEventArgs e)
+        {
+            Window x = new Window
+            {
+                ResizeMode = ResizeMode.NoResize,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Name = "MoreOptionsWin",
+                Title = "More Options",
+                Width = 500,
+                Height = 400,
+                
+            };
+
+            // Objects
+            Grid MoreGrid = new Grid
+            {
+                Margin = new Thickness(100, 100, 100, 100),
+                Width = 300,
+                Height = 200,
+            };
+            StackPanel Stack = new StackPanel
+            {
+                Width = 300,
+                Height = 100,
+
+            };
+
+            Slider OverTimeLimit = new Slider
+            {
+                Width = 200,
+            };
+            MoreGrid.Children.Add(OverTimeLimit);
+            MoreGrid.Children.Add(Stack);
+            x.Content = MoreGrid;
+            x.Show();
+        }*/
+
+        
     }
 }
